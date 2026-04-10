@@ -46,26 +46,6 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .planet-count{color:#44ddff;font-size:.6rem;letter-spacing:.05em;min-width:16px;text-align:center}
 .planet-lbl{color:#3a4a58;font-size:.45rem;letter-spacing:.06em}
 
-/* Upload button */
-.ui-upload{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:300;border:1px solid #2a3a48;background:rgba(8,8,20,.92);color:#22cc88;font-size:.55rem;padding:5px 14px;cursor:pointer;font-family:'Courier New',monospace;letter-spacing:.08em;border-radius:14px;transition:color .2s,border-color .2s,box-shadow .3s;text-transform:uppercase}
-.ui-upload:hover{color:#44ffaa;border-color:#44ffaa;box-shadow:0 0 12px rgba(68,255,170,0.2)}
-.ui-upload.uploading{color:#ddaa22;border-color:#ddaa22;pointer-events:none;animation:uploadPulse 1s infinite}
-@keyframes uploadPulse{0%,100%{opacity:1}50%{opacity:0.5}}
-
-/* Upload overlay */
-.upload-overlay{position:fixed;inset:0;z-index:400;background:rgba(3,3,12,.85);display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
-.upload-overlay.visible{display:flex}
-.upload-box{border:2px dashed #2a3a48;border-radius:16px;padding:40px 60px;text-align:center;transition:border-color .3s,background .3s;max-width:400px}
-.upload-box.dragover{border-color:#44ddff;background:rgba(68,221,255,0.05)}
-.upload-box h3{color:#44ddff;font-size:.8rem;letter-spacing:.15em;margin-bottom:12px;font-family:'Courier New',monospace}
-.upload-box p{color:#3a4a58;font-size:.5rem;letter-spacing:.06em;margin-bottom:16px;font-family:'Courier New',monospace}
-.upload-box input[type=file]{display:none}
-.upload-box .pick-btn{border:1px solid #22cc88;background:none;color:#22cc88;font-size:.55rem;padding:6px 18px;cursor:pointer;font-family:'Courier New',monospace;letter-spacing:.06em;border-radius:10px;transition:all .2s}
-.upload-box .pick-btn:hover{background:rgba(34,204,136,0.1);color:#44ffaa;border-color:#44ffaa}
-.upload-box .close-btn{position:absolute;top:20px;right:24px;border:none;background:none;color:#556;font-size:1.2rem;cursor:pointer;font-family:'Courier New',monospace;transition:color .2s}
-.upload-box .close-btn:hover{color:#ff4488}
-.upload-progress{color:#ddaa22;font-size:.5rem;margin-top:10px;font-family:'Courier New',monospace;letter-spacing:.06em;display:none}
-
 /* Card shape variants */
 .tv-card:not(.card-tv) .tv-stand,.tv-card:not(.card-tv) .tv-base{display:none}
 .tv-card.card-sphere .tv-frame{border-radius:50%;overflow:hidden}
@@ -112,15 +92,60 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .focus-overlay{position:fixed;inset:0;z-index:150;background:rgba(3,3,12,.45);pointer-events:none;opacity:0;transition:opacity .5s}
 .focus-overlay.active{opacity:1}
 
-/* Loading screen */
-.loading-screen{position:fixed;inset:0;z-index:500;background:#080816;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;transition:opacity .6s}
-.loading-screen.hidden{opacity:0;pointer-events:none}
-.loading-screen h2{color:#44ddff;font-size:.8rem;letter-spacing:.3em;font-family:'Courier New',monospace;animation:tG 3s infinite}
-.loading-screen p{color:#3a4a58;font-size:.45rem;font-family:'Courier New',monospace;letter-spacing:.1em}
+/* ═══ BRIGHTNESS CONTROL ═══ */
+.brightness-ctrl{position:fixed;left:20px;top:50%;transform:translateY(-50%);z-index:300;display:flex;flex-direction:column;align-items:center;gap:6px;user-select:none}
+.brightness-ctrl .br-icon{color:#ffcc44;font-size:.7rem;pointer-events:none}
+.brightness-ctrl .br-track{width:4px;height:100px;background:rgba(42,58,72,.5);border-radius:2px;position:relative;cursor:pointer;border:1px solid #2a3a48;transition:border-color .2s}
+.brightness-ctrl .br-track:hover{border-color:#ffcc44}
+.brightness-ctrl .br-fill{position:absolute;bottom:0;left:0;width:100%;background:linear-gradient(to top,#ffcc44,#ff8844);border-radius:2px;transition:height .1s}
+.brightness-ctrl .br-val{color:#ffcc44;font-size:.45rem;letter-spacing:.06em;font-family:'Courier New',monospace;min-width:28px;text-align:center}
+@media (max-width: 768px) {
+  .brightness-ctrl{left:10px}
+  .brightness-ctrl .br-track{height:80px;width:6px}
+  .brightness-ctrl .br-icon{font-size:.6rem}
+}
+@media (max-width: 480px) {
+  .brightness-ctrl .br-track{height:60px}
+}
+
+/* ═══ TAP TO START overlay ═══ */
+.tap-overlay{position:fixed;inset:0;z-index:999;background:rgba(8,8,22,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tap-overlay .tap-icon{font-size:4rem;animation:tapPulse 2s infinite}
+.tap-overlay .tap-text{color:#44ddff;font-family:'Courier New',monospace;font-size:1rem;letter-spacing:.2em;margin-top:16px;text-transform:uppercase}
+@keyframes tapPulse{0%,100%{transform:scale(1);opacity:0.8}50%{transform:scale(1.15);opacity:1}}
+
+/* ═══ MOBILE RESPONSIVE ═══ */
+@media (max-width: 768px) {
+  .ui-title{font-size:.9rem;top:12px;left:14px}
+  .ui-hint{font-size:.4rem;bottom:8px}
+  .mode-toggle{top:12px;right:12px;gap:5px}
+  .mode-toggle span{font-size:.4rem}
+  .toggle-track{width:28px;height:14px}
+  .toggle-knob{width:10px;height:10px}
+  .toggle-track.on .toggle-knob{left:16px}
+  .ui-side{right:10px;gap:2px}
+  .ui-side button{width:36px;height:36px;font-size:1.1rem}
+  .ui-reset{bottom:8px;left:12px;font-size:.4rem;padding:5px 10px}
+  .ui-blackhole{bottom:8px;right:12px;font-size:.45rem;padding:6px 14px}
+  .shape-picker{bottom:32px;gap:1px;padding:3px 5px;border-radius:14px;flex-wrap:wrap;max-width:90vw;justify-content:center}
+  .shape-btn{font-size:.4rem;padding:4px 5px}
+  .planet-controls{top:42px;right:12px;gap:3px}
+  .planet-btn{width:32px;height:32px;font-size:1rem}
+  .planet-count{font-size:.55rem}
+  .planet-lbl{font-size:.35rem}
+  .tv-card video{max-width:100%}
+}
+@media (max-width: 480px) {
+  .ui-title{font-size:.75rem;top:8px;left:10px}
+  .ui-hint{display:none}
+  .shape-picker{bottom:28px;gap:1px;padding:2px 4px}
+  .shape-btn{font-size:.35rem;padding:3px 4px}
+  .ui-side button{width:40px;height:40px;font-size:1.2rem}
+  .planet-btn{width:36px;height:36px;font-size:1.1rem}
+}
 </style>
 </head>
 <body>
-<div class="loading-screen" id="loadScreen"><h2>📺 TV SOLAR</h2><p>LOADING VIDEOS...</p></div>
 <div class="ui-title">📺 TV SOLAR</div>
 <div class="ui-hint">DRAG / SCROLL rotate &nbsp;·&nbsp; CLICK TV to focus &nbsp;·&nbsp; ESC reset</div>
 <div class="mode-toggle">
@@ -129,7 +154,11 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
     <span id="mL2">ZOOM</span>
 </div>
 <div class="ui-side"><button id="zi">+</button><button id="zo">−</button></div>
-<button class="ui-upload" id="uploadBtn">⬆ UPLOAD VIDEO</button>
+<div class="brightness-ctrl">
+    <span class="br-icon">☀</span>
+    <div class="br-track" id="brTrack"><div class="br-fill" id="brFill" style="height:50%"></div></div>
+    <span class="br-val" id="brVal">100%</span>
+</div>
 <button class="ui-reset" id="resetBtn">[ RESET ]</button>
 <button class="ui-blackhole" id="bhBtn">● BLACK HOLE</button>
 <div class="shape-picker" id="shapePicker">
@@ -145,23 +174,11 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 <div class="planet-controls">
     <span class="planet-lbl">PLANETS</span>
     <button class="planet-btn" id="pMinus">−</button>
-    <span class="planet-count" id="pCount">0</span>
+    <span class="planet-count" id="pCount">4</span>
     <button class="planet-btn" id="pPlus">+</button>
 </div>
 <div class="focus-overlay" id="focusOv"></div>
-
-<!-- Upload overlay -->
-<div class="upload-overlay" id="uploadOverlay">
-    <div class="upload-box" id="uploadBox">
-        <button class="close-btn" id="uploadClose">✕</button>
-        <h3>⬆ UPLOAD VIDEO</h3>
-        <p>DRAG & DROP video file here or click below</p>
-        <button class="pick-btn" id="pickBtn">CHOOSE FILE</button>
-        <input type="file" id="fileInput" accept="video/*">
-        <div class="upload-progress" id="uploadProgress">UPLOADING... 0%</div>
-    </div>
-</div>
-
+<div class="tap-overlay" id="tapOverlay"><div class="tap-icon">📺</div><div class="tap-text">Tap to Start</div></div>
 <canvas id="noise"></canvas>
 <div id="c3d"></div>
 <div id="c2d"></div>
@@ -173,93 +190,9 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 import * as THREE from 'three';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 
-// ═══ LOAD VIDEOS FROM SERVER ═══
-const staticVideos = [
-    { name: 'IMG_0776.MP4', url: 'videos/IMG_0776.MP4' },
-    { name: 'copy_012BCC15-2363-4E1A-BCDC-C19EEE80321A.mp4', url: 'videos/copy_012BCC15-2363-4E1A-BCDC-C19EEE80321A.mp4' },
-    { name: 'onepiece_demo.mp4', url: 'videos/onepiece_demo.mp4' },
-    { name: 'IMG_3922 (1) - Trim.mp4', url: 'videos/IMG_3922 (1) - Trim.mp4' },
-    { name: 'JGVG8760.MP4', url: 'videos/JGVG8760.MP4' },
-];
-let serverVideos = [];
-async function fetchVideos() {
-    try {
-        const res = await fetch('/api/videos');
-        if (!res.ok) throw new Error('API not available');
-        serverVideos = await res.json();
-    } catch(e) {
-        console.warn('API not available, using static video list');
-        serverVideos = staticVideos;
-    }
-}
+// ═══ MOBILE DETECT ═══
+const isMobile = /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || ('ontouchstart' in window && window.innerWidth < 1024);
 
-// ═══ UPLOAD ═══
-const uploadBtn = document.getElementById('uploadBtn');
-const uploadOverlay = document.getElementById('uploadOverlay');
-const uploadBox = document.getElementById('uploadBox');
-const uploadClose = document.getElementById('uploadClose');
-const pickBtn = document.getElementById('pickBtn');
-const fileInput = document.getElementById('fileInput');
-const uploadProgress = document.getElementById('uploadProgress');
-
-uploadBtn.addEventListener('click', () => uploadOverlay.classList.add('visible'));
-uploadClose.addEventListener('click', () => uploadOverlay.classList.remove('visible'));
-uploadOverlay.addEventListener('click', e => { if (e.target === uploadOverlay) uploadOverlay.classList.remove('visible'); });
-pickBtn.addEventListener('click', () => fileInput.click());
-fileInput.addEventListener('change', () => { if (fileInput.files[0]) doUpload(fileInput.files[0]); });
-
-uploadBox.addEventListener('dragover', e => { e.preventDefault(); uploadBox.classList.add('dragover'); });
-uploadBox.addEventListener('dragleave', () => uploadBox.classList.remove('dragover'));
-uploadBox.addEventListener('drop', e => {
-    e.preventDefault();
-    uploadBox.classList.remove('dragover');
-    const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('video/')) doUpload(file);
-});
-
-async function doUpload(file) {
-    uploadBtn.classList.add('uploading');
-    uploadBtn.textContent = '⬆ UPLOADING...';
-    uploadProgress.style.display = 'block';
-    uploadProgress.textContent = 'UPLOADING... 0%';
-
-    const formData = new FormData();
-    formData.append('video', file);
-
-    try {
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', '/api/upload');
-
-        xhr.upload.addEventListener('progress', e => {
-            if (e.lengthComputable) {
-                const pct = Math.round(e.loaded / e.total * 100);
-                uploadProgress.textContent = `UPLOADING... ${pct}%`;
-            }
-        });
-
-        const result = await new Promise((resolve, reject) => {
-            xhr.onload = () => {
-                if (xhr.status === 200) resolve(JSON.parse(xhr.responseText));
-                else reject(new Error(xhr.statusText));
-            };
-            xhr.onerror = () => reject(new Error('Upload failed'));
-            xhr.send(formData);
-        });
-
-        // Add as new planet
-        spawnPlanetWithVideo(result.url, result.name);
-        uploadOverlay.classList.remove('visible');
-    } catch(e) {
-        uploadProgress.textContent = 'ERROR: ' + e.message;
-    } finally {
-        uploadBtn.classList.remove('uploading');
-        uploadBtn.textContent = '⬆ UPLOAD VIDEO';
-        fileInput.value = '';
-        setTimeout(() => { uploadProgress.style.display = 'none'; }, 2000);
-    }
-}
-
-// ═══ SCENE SETUP ═══
 const scene = new THREE.Scene();
 scene.fog = new THREE.Fog(0x080816, 28, 65);
 
@@ -269,7 +202,7 @@ camera.position.set(0, 4, 18);
 const gl = new THREE.WebGLRenderer({ antialias:true });
 gl.setClearColor(0x080816);
 gl.setSize(innerWidth, innerHeight);
-gl.setPixelRatio(Math.min(devicePixelRatio, 2));
+gl.setPixelRatio(Math.min(devicePixelRatio, isMobile ? 1.5 : 2));
 document.getElementById('c3d').appendChild(gl.domElement);
 
 const css2d = new CSS2DRenderer();
@@ -296,18 +229,26 @@ scene.add(systemGroup);
 function buildTV(w, h, d, color, hasAntenna) {
     const tvGroup = new THREE.Group();
     const c = new THREE.Color(color);
+
+    // Screen body (box)
     const bodyGeo = new THREE.BoxGeometry(w, h, d);
     const edgeMat = new THREE.LineBasicMaterial({ color: c, transparent: true, opacity: 0.7 });
     const edges = new THREE.LineSegments(new THREE.EdgesGeometry(bodyGeo), edgeMat);
     tvGroup.add(edges);
+
+    // Solid dark fill
     const fillMat = new THREE.MeshBasicMaterial({ color: 0x0a0a18, transparent: true, opacity: 0.85 });
     const fill = new THREE.Mesh(bodyGeo, fillMat);
     tvGroup.add(fill);
+
+    // Screen glow panel (front face)
     const glowGeo = new THREE.PlaneGeometry(w * 0.88, h * 0.82);
     const glowMat = new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.06, side: THREE.DoubleSide });
     const glow = new THREE.Mesh(glowGeo, glowMat);
     glow.position.z = d / 2 + 0.01;
     tvGroup.add(glow);
+
+    // Stand
     const standGeo = new THREE.BoxGeometry(w * 0.08, h * 0.35, d * 0.5);
     const standMat = new THREE.MeshBasicMaterial({ color: 0x1a1a2a, transparent: true, opacity: 0.8 });
     const stand = new THREE.Mesh(standGeo, standMat);
@@ -316,6 +257,8 @@ function buildTV(w, h, d, color, hasAntenna) {
     const standEdges = new THREE.LineSegments(new THREE.EdgesGeometry(standGeo), new THREE.LineBasicMaterial({ color: c, transparent: true, opacity: 0.3 }));
     standEdges.position.copy(stand.position);
     tvGroup.add(standEdges);
+
+    // Base
     const baseGeo = new THREE.BoxGeometry(w * 0.6, h * 0.05, d * 0.8);
     const base = new THREE.Mesh(baseGeo, standMat.clone());
     base.position.y = -h / 2 - h * 0.35;
@@ -323,12 +266,15 @@ function buildTV(w, h, d, color, hasAntenna) {
     const baseEdges = new THREE.LineSegments(new THREE.EdgesGeometry(baseGeo), new THREE.LineBasicMaterial({ color: c, transparent: true, opacity: 0.3 }));
     baseEdges.position.copy(base.position);
     tvGroup.add(baseEdges);
+
+    // Antenna (optional — for retro vibe)
     if (hasAntenna) {
         const antMat = new THREE.LineBasicMaterial({ color: 0x888899 });
         const antL = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-w*0.15, h/2, 0), new THREE.Vector3(-w*0.3, h/2+h*0.5, 0)]);
         const antR = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(w*0.15, h/2, 0), new THREE.Vector3(w*0.3, h/2+h*0.5, 0)]);
         tvGroup.add(new THREE.Line(antL, antMat));
         tvGroup.add(new THREE.Line(antR, antMat));
+        // Antenna tips
         const tipMat = new THREE.MeshBasicMaterial({ color: 0x44ddff });
         const tipL = new THREE.Mesh(new THREE.SphereGeometry(0.04, 5, 4), tipMat);
         tipL.position.set(-w*0.3, h/2+h*0.5, 0);
@@ -337,6 +283,7 @@ function buildTV(w, h, d, color, hasAntenna) {
         tipR.position.set(w*0.3, h/2+h*0.5, 0);
         tvGroup.add(tipR);
     }
+
     return { group: tvGroup, fill, edges, edgeMat, glowMat };
 }
 
@@ -344,121 +291,155 @@ function buildTV(w, h, d, color, hasAntenna) {
 let currentShape = 'TV';
 
 function buildSphere(w, h, d, color) {
-    const g = new THREE.Group(); const c = new THREE.Color(color);
+    const g = new THREE.Group();
+    const c = new THREE.Color(color);
     const r = Math.max(w, h) * 0.5;
     const geo = new THREE.SphereGeometry(r, 16, 12);
     const fillMat = new THREE.MeshBasicMaterial({ color: 0x0a0a18, transparent: true, opacity: 0.85 });
-    const fill = new THREE.Mesh(geo, fillMat); g.add(fill);
+    const fill = new THREE.Mesh(geo, fillMat);
+    g.add(fill);
     const edgeMat = new THREE.LineBasicMaterial({ color: c, transparent: true, opacity: 0.7 });
-    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo), edgeMat); g.add(edges);
+    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo), edgeMat);
+    g.add(edges);
+    const glowGeo = new THREE.TorusGeometry(r * 1.15, 0.03, 8, 40);
     const glowMat = new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.15, side: THREE.DoubleSide });
-    g.add(new THREE.Mesh(new THREE.TorusGeometry(r*1.15, 0.03, 8, 40), glowMat));
-    const glow2 = new THREE.Mesh(new THREE.TorusGeometry(r*1.15, 0.03, 8, 40), glowMat.clone());
-    glow2.rotation.x = Math.PI/2; g.add(glow2);
+    g.add(new THREE.Mesh(glowGeo, glowMat));
+    const glow2 = new THREE.Mesh(new THREE.TorusGeometry(r * 1.15, 0.03, 8, 40), glowMat.clone());
+    glow2.rotation.x = Math.PI / 2;
+    g.add(glow2);
     return { group: g, fill, edges, edgeMat, glowMat };
 }
+
 function buildDiamond(w, h, d, color) {
-    const g = new THREE.Group(); const c = new THREE.Color(color);
+    const g = new THREE.Group();
+    const c = new THREE.Color(color);
     const r = Math.max(w, h) * 0.55;
     const geo = new THREE.OctahedronGeometry(r, 0);
-    const fill = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0x0a0a18, transparent: true, opacity: 0.8 })); g.add(fill);
+    const fillMat = new THREE.MeshBasicMaterial({ color: 0x0a0a18, transparent: true, opacity: 0.8 });
+    const fill = new THREE.Mesh(geo, fillMat);
+    g.add(fill);
     const edgeMat = new THREE.LineBasicMaterial({ color: c, transparent: true, opacity: 0.85 });
-    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo), edgeMat); g.add(edges);
+    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo), edgeMat);
+    g.add(edges);
     const glowMat = new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.06, side: THREE.DoubleSide });
     return { group: g, fill, edges, edgeMat, glowMat };
 }
+
 function buildCube(w, h, d, color) {
-    const g = new THREE.Group(); const c = new THREE.Color(color);
+    const g = new THREE.Group();
+    const c = new THREE.Color(color);
     const s = Math.max(w, h) * 0.65;
     const geo = new THREE.BoxGeometry(s, s, s);
-    const fill = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0x0a0a18, transparent: true, opacity: 0.85 })); g.add(fill);
+    const fillMat = new THREE.MeshBasicMaterial({ color: 0x0a0a18, transparent: true, opacity: 0.85 });
+    const fill = new THREE.Mesh(geo, fillMat);
+    g.add(fill);
     const edgeMat = new THREE.LineBasicMaterial({ color: c, transparent: true, opacity: 0.7 });
-    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo), edgeMat); g.add(edges);
+    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo), edgeMat);
+    g.add(edges);
+    const glowGeo = new THREE.PlaneGeometry(s * 0.9, s * 0.9);
     const glowMat = new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.06, side: THREE.DoubleSide });
-    const glow = new THREE.Mesh(new THREE.PlaneGeometry(s*0.9, s*0.9), glowMat); glow.position.z = s/2+0.01; g.add(glow);
+    const glow = new THREE.Mesh(glowGeo, glowMat);
+    glow.position.z = s / 2 + 0.01;
+    g.add(glow);
     return { group: g, fill, edges, edgeMat, glowMat };
 }
+
 function buildDonut(w, h, d, color) {
-    const g = new THREE.Group(); const c = new THREE.Color(color);
-    const R = Math.max(w, h) * 0.4; const tube = R * 0.35;
+    const g = new THREE.Group();
+    const c = new THREE.Color(color);
+    const R = Math.max(w, h) * 0.4;
+    const tube = R * 0.35;
     const geo = new THREE.TorusGeometry(R, tube, 12, 32);
-    const fill = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0x0a0a18, transparent: true, opacity: 0.85 })); g.add(fill);
+    const fillMat = new THREE.MeshBasicMaterial({ color: 0x0a0a18, transparent: true, opacity: 0.85 });
+    const fill = new THREE.Mesh(geo, fillMat);
+    g.add(fill);
     const edgeMat = new THREE.LineBasicMaterial({ color: c, transparent: true, opacity: 0.7 });
-    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo), edgeMat); g.add(edges);
+    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo), edgeMat);
+    g.add(edges);
     const glowMat = new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.1, side: THREE.DoubleSide });
     return { group: g, fill, edges, edgeMat, glowMat };
 }
+
 function buildPyramid(w, h, d, color) {
-    const g = new THREE.Group(); const c = new THREE.Color(color);
+    const g = new THREE.Group();
+    const c = new THREE.Color(color);
     const r = Math.max(w, h) * 0.55;
-    const geo = new THREE.ConeGeometry(r*0.7, r*1.4, 4);
-    const fill = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0x0a0a18, transparent: true, opacity: 0.85 })); g.add(fill);
+    const geo = new THREE.ConeGeometry(r * 0.7, r * 1.4, 4);
+    const fillMat = new THREE.MeshBasicMaterial({ color: 0x0a0a18, transparent: true, opacity: 0.85 });
+    const fill = new THREE.Mesh(geo, fillMat);
+    g.add(fill);
     const edgeMat = new THREE.LineBasicMaterial({ color: c, transparent: true, opacity: 0.8 });
-    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo), edgeMat); g.add(edges);
+    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo), edgeMat);
+    g.add(edges);
     const glowMat = new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.06, side: THREE.DoubleSide });
     return { group: g, fill, edges, edgeMat, glowMat };
 }
+
 function buildCrystal(w, h, d, color) {
-    const g = new THREE.Group(); const c = new THREE.Color(color);
+    const g = new THREE.Group();
+    const c = new THREE.Color(color);
     const r = Math.max(w, h) * 0.5;
     const geo = new THREE.IcosahedronGeometry(r, 0);
-    const fill = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0x0a0a18, transparent: true, opacity: 0.75 })); g.add(fill);
+    const fillMat = new THREE.MeshBasicMaterial({ color: 0x0a0a18, transparent: true, opacity: 0.75 });
+    const fill = new THREE.Mesh(geo, fillMat);
+    g.add(fill);
     const edgeMat = new THREE.LineBasicMaterial({ color: c, transparent: true, opacity: 0.85 });
-    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo), edgeMat); g.add(edges);
-    g.add(new THREE.Mesh(new THREE.IcosahedronGeometry(r*0.5, 1), new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.08, wireframe: true })));
+    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo), edgeMat);
+    g.add(edges);
+    const inner = new THREE.Mesh(new THREE.IcosahedronGeometry(r * 0.5, 1), new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.08, wireframe: true }));
+    g.add(inner);
     const glowMat = new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.06 });
     return { group: g, fill, edges, edgeMat, glowMat };
 }
+
 function buildKnot(w, h, d, color) {
-    const g = new THREE.Group(); const c = new THREE.Color(color);
+    const g = new THREE.Group();
+    const c = new THREE.Color(color);
     const r = Math.max(w, h) * 0.35;
-    const geo = new THREE.TorusKnotGeometry(r, r*0.25, 64, 8, 2, 3);
-    const fill = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0x0a0a18, transparent: true, opacity: 0.85 })); g.add(fill);
+    const geo = new THREE.TorusKnotGeometry(r, r * 0.25, 64, 8, 2, 3);
+    const fillMat = new THREE.MeshBasicMaterial({ color: 0x0a0a18, transparent: true, opacity: 0.85 });
+    const fill = new THREE.Mesh(geo, fillMat);
+    g.add(fill);
     const edgeMat = new THREE.LineBasicMaterial({ color: c, transparent: true, opacity: 0.7 });
-    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo), edgeMat); g.add(edges);
+    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(geo), edgeMat);
+    g.add(edges);
     const glowMat = new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.06 });
     return { group: g, fill, edges, edgeMat, glowMat };
 }
 
 function buildShape(type, w, h, d, color, hasAntenna) {
     switch(type) {
-        case 'SPHERE': return buildSphere(w, h, d, color);
+        case 'SPHERE':  return buildSphere(w, h, d, color);
         case 'DIAMOND': return buildDiamond(w, h, d, color);
-        case 'CUBE': return buildCube(w, h, d, color);
-        case 'DONUT': return buildDonut(w, h, d, color);
+        case 'CUBE':    return buildCube(w, h, d, color);
+        case 'DONUT':   return buildDonut(w, h, d, color);
         case 'PYRAMID': return buildPyramid(w, h, d, color);
         case 'CRYSTAL': return buildCrystal(w, h, d, color);
-        case 'KNOT': return buildKnot(w, h, d, color);
-        default: return buildTV(w, h, d, color, hasAntenna);
+        case 'KNOT':    return buildKnot(w, h, d, color);
+        default:        return buildTV(w, h, d, color, hasAntenna);
     }
 }
 
-// ═══ DATA ═══
+// ═══ CENTRAL TV (star) ═══
 const css2dObjs = [];
 const starR = 2.2;
-const moonColors = [0x44ddff, 0xff4488, 0x88ccff, 0xffcc22, 0xaa44ff, 0x44ffaa];
-const planetColorPool = [0xcc2266, 0x22cc88, 0x3399dd, 0xddaa22, 0xaa44ff, 0x44ffaa, 0xff8844, 0x8844ff, 0xff44aa, 0x44aaff];
-const planetNamePool = ['ALPHA','BETA','GAMMA','DELTA','EPSILON','ZETA','ETA','THETA','IOTA','KAPPA'];
-const tvDefs = [];
-const planets = [];
-let planetIdCounter = 0;
-let origOrbitR = [];
-
-// ═══ CENTRAL TV (star) ═══
 let starTV = buildShape(currentShape, 3.2, 2.2, 0.4, 0xff6600, true);
 starTV.group.position.y = 0;
 systemGroup.add(starTV.group);
 
+// Star orbit ring (decorative)
 const starRingGeo = new THREE.TorusGeometry(1.8, 0.015, 8, 60);
 const starRingMat = new THREE.MeshBasicMaterial({ color: 0xff6600, transparent: true, opacity: 0.2 });
 const starRing = new THREE.Mesh(starRingGeo, starRingMat);
 starRing.rotation.x = Math.PI / 2;
 systemGroup.add(starRing);
 
-let starVidUrl = '';
+// Star CSS2D video
 const starVid = document.createElement('video');
+starVid.src = 'videos/IMG_0776.MP4';
 starVid.loop = true; starVid.muted = true; starVid.playsInline = true;
 starVid.preload = 'metadata'; starVid.autoplay = true;
+starVid.play().catch(()=>{});
 
 const starCard = document.createElement('div');
 starCard.className = 'tv-card card-tv';
@@ -479,15 +460,482 @@ starCssObj.position.y = 0;
 systemGroup.add(starCssObj);
 css2dObjs.push(starCssObj);
 
-// ═══ SPAWN PLANET ═══
-function spawnPlanetWithVideo(url, name) {
+// ═══ TV DATA (orbiting TVs) ═══
+const tvDefs = [
+    { orbitR:5.0,  tvW:2.0, tvH:1.4, tvD:0.3, color:0xcc2266, speed:0.18, tilt:0.08,  moons:2, name:'COPY',     url:'videos/copy_012BCC15-2363-4E1A-BCDC-C19EEE80321A.mp4', antenna:true },
+    { orbitR:8.0,  tvW:2.4, tvH:1.6, tvD:0.35,color:0x22cc88, speed:0.12, tilt:-0.12, moons:2, name:'ONEPIECE', url:'videos/onepiece_demo.mp4', antenna:false },
+    { orbitR:11.0, tvW:2.2, tvH:1.5, tvD:0.3, color:0x3399dd, speed:0.08, tilt:0.15,  moons:1, name:'TRIM',    url:'videos/IMG_3922 (1) - Trim.mp4', antenna:true },
+    { orbitR:14.5, tvW:2.6, tvH:1.7, tvD:0.35,color:0xddaa22, speed:0.05, tilt:-0.18, moons:2, name:'JGVG',    url:'videos/JGVG8760.MP4', antenna:false },
+];
+
+const tvHexColors = ['#cc2266','#22cc88','#3399dd','#ddaa22'];
+const moonColors = [0x44ddff, 0xff4488, 0x88ccff, 0xffcc22, 0xaa44ff, 0x44ffaa];
+
+// ═══ BUILD TVs ═══
+const planets = [];
+
+tvDefs.forEach((def, i) => {
+    const pGroup = new THREE.Group();
+    systemGroup.add(pGroup);
+
+    // Orbit ring
+    const ringGeo = new THREE.TorusGeometry(def.orbitR, 0.015, 8, 120);
+    const ringMat = new THREE.MeshBasicMaterial({ color: def.color, transparent: true, opacity: 0.1 });
+    const ring = new THREE.Mesh(ringGeo, ringMat);
+    ring.rotation.x = Math.PI / 2;
+    systemGroup.add(ring);
+
+    // 3D shape mesh
+    const tv = buildShape(currentShape, def.tvW, def.tvH, def.tvD, def.color, def.antenna);
+    pGroup.add(tv.group);
+
+    // Moons (small floating mini-TVs / cubes)
+    const moons = [];
+    for (let m = 0; m < def.moons; m++) {
+        const mOrbitR = def.tvW * 1.2 + m * 0.5;
+        const mSpeed = 1.2 + m * 0.7;
+        const mPhase = m * Math.PI * 2 / def.moons;
+
+        // Moon orbit ring
+        const moRing = new THREE.Mesh(
+            new THREE.TorusGeometry(mOrbitR, 0.003, 6, 40),
+            new THREE.MeshBasicMaterial({ color: moonColors[(i + m) % 6], transparent: true, opacity: 0.12 })
+        );
+        moRing.rotation.x = Math.PI / 2 + (m * 0.25 - 0.12);
+        pGroup.add(moRing);
+
+        // Moon = mini cube (tiny TV)
+        const mSize = 0.12 + Math.random() * 0.08;
+        const mGeo = new THREE.BoxGeometry(mSize * 1.6, mSize, mSize * 0.3);
+        const mMat = new THREE.MeshBasicMaterial({ color: moonColors[(i + m) % 6], wireframe: true });
+        const mMesh = new THREE.Mesh(mGeo, mMat);
+        pGroup.add(mMesh);
+
+        moons.push({ mesh: mMesh, orbitR: mOrbitR, speed: mSpeed, phase: mPhase, tiltX: m * 0.25 - 0.12 });
+    }
+
+    // CSS2D Video card (TV style)
+    const vid = document.createElement('video');
+    vid.src = def.url;
+    vid.loop = true; vid.muted = true; vid.playsInline = true;
+    vid.preload = 'metadata'; vid.autoplay = true;
+    vid.play().catch(()=>{});
+
+    const card = document.createElement('div');
+    card.className = 'tv-card card-tv';
+    card.innerHTML = `
+        ${def.antenna ? '<div class="tv-antenna"><span></span><span></span></div>' : ''}
+        <div class="tv-frame"><div class="tv-led"></div></div>
+        <div class="tv-stand"></div>
+        <div class="tv-base"></div>
+        <div class="tv-label">${def.name}</div>
+    `;
+    card.querySelector('.tv-frame').prepend(vid);
+    card.style.outline = `none`;
+
+    card.addEventListener('mouseenter', () => {
+        vid.muted = false; vid.play().catch(()=>{});
+    });
+    card.addEventListener('mouseleave', () => {
+        vid.muted = true;
+    });
+    card.addEventListener('click', e => {
+        e.stopPropagation();
+        focusOnPlanet(i);
+    });
+
+    const cssObj = new CSS2DObject(card);
+    cssObj.position.y = 0;
+    pGroup.add(cssObj);
+    css2dObjs.push(cssObj);
+
+    planets.push({
+        group: pGroup,
+        orbitR: def.orbitR,
+        speed: def.speed,
+        tilt: def.tilt,
+        startAngle: i * Math.PI * 2 / tvDefs.length + Math.random() * 0.4,
+        moons,
+        ringMat,
+        ring,
+        cssObj,
+        tv,
+    });
+});
+
+// ═══ CHARACTER ═══
+const charGroup = new THREE.Group();
+scene.add(charGroup);
+const headMesh = new THREE.Mesh(new THREE.IcosahedronGeometry(0.18, 1), new THREE.MeshBasicMaterial({ color: 0x44ddff, wireframe: true }));
+headMesh.position.y = 0.45;
+charGroup.add(headMesh);
+const eyeM = new THREE.MeshBasicMaterial({ color: 0xff4488 });
+const eL = new THREE.Mesh(new THREE.SphereGeometry(0.03, 5, 4), eyeM); eL.position.set(-0.06, 0.48, 0.14); charGroup.add(eL);
+const eR = new THREE.Mesh(new THREE.SphereGeometry(0.03, 5, 4), eyeM); eR.position.set(0.06, 0.48, 0.14); charGroup.add(eR);
+const torsoM = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.32, 0.16), new THREE.MeshBasicMaterial({ color: 0xff6600, wireframe: true }));
+torsoM.position.y = 0.12; charGroup.add(torsoM);
+const aGeo = new THREE.BoxGeometry(0.08, 0.28, 0.08);
+const aL = new THREE.Mesh(aGeo, new THREE.MeshBasicMaterial({ color: 0x3399dd, wireframe: true })); aL.position.set(-0.2, 0.12, 0); charGroup.add(aL);
+const aR = new THREE.Mesh(aGeo, new THREE.MeshBasicMaterial({ color: 0x22cc88, wireframe: true })); aR.position.set(0.2, 0.12, 0); charGroup.add(aR);
+const lGeo = new THREE.BoxGeometry(0.09, 0.28, 0.09);
+const lL = new THREE.Mesh(lGeo, new THREE.MeshBasicMaterial({ color: 0xddaa22, wireframe: true })); lL.position.set(-0.07, -0.18, 0); charGroup.add(lL);
+const lR = new THREE.Mesh(lGeo, new THREE.MeshBasicMaterial({ color: 0xcc2266, wireframe: true })); lR.position.set(0.07, -0.18, 0); charGroup.add(lR);
+const antM = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.16, 4), new THREE.MeshBasicMaterial({ color: 0x44ddff }));
+antM.position.set(0, 0.62, 0); charGroup.add(antM);
+const antTip = new THREE.Mesh(new THREE.SphereGeometry(0.025, 5, 4), new THREE.MeshBasicMaterial({ color: 0xff4488 }));
+antTip.position.set(0, 0.72, 0); charGroup.add(antTip);
+charGroup.scale.setScalar(0.7);
+
+// ═══ PARTICLES & STARS ═══
+const PCOUNT = isMobile ? 200 : 600;
+const pPos = new Float32Array(PCOUNT * 3), pCol = new Float32Array(PCOUNT * 3);
+const pal = [new THREE.Color(0x44ddff), new THREE.Color(0xff4488), new THREE.Color(0x22cc88), new THREE.Color(0xddaa22), new THREE.Color(0x3399dd)];
+for (let i = 0; i < PCOUNT; i++) {
+    const r = 6 + Math.random() * 35, th = Math.random() * Math.PI * 2, ph = Math.acos(2 * Math.random() - 1);
+    pPos[i * 3] = r * Math.sin(ph) * Math.cos(th);
+    pPos[i * 3 + 1] = r * Math.sin(ph) * Math.sin(th);
+    pPos[i * 3 + 2] = r * Math.cos(ph);
+    const c = pal[~~(Math.random() * pal.length)];
+    pCol[i * 3] = c.r; pCol[i * 3 + 1] = c.g; pCol[i * 3 + 2] = c.b;
+}
+const pGeo = new THREE.BufferGeometry();
+pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+pGeo.setAttribute('color', new THREE.BufferAttribute(pCol, 3));
+const particlesMesh = new THREE.Points(pGeo, new THREE.PointsMaterial({ size: 0.05, vertexColors: true, depthWrite: false, transparent: true, opacity: 0.7 }));
+scene.add(particlesMesh);
+
+// BG stars
+const BGS = isMobile ? 500 : 1400, bP = new Float32Array(BGS * 3);
+for (let i = 0; i < BGS; i++) { bP[i*3]=(Math.random()-.5)*120; bP[i*3+1]=(Math.random()-.5)*120; bP[i*3+2]=-20-Math.random()*70; }
+const bGeo = new THREE.BufferGeometry(); bGeo.setAttribute('position', new THREE.BufferAttribute(bP, 3));
+scene.add(new THREE.Points(bGeo, new THREE.PointsMaterial({ color: 0x334466, size: 0.04 })));
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.15));
+
+// ═══ BLACK HOLE ═══
+let bhActive = false;
+let bhProgress = 0; // 0..1 suck phase, 1..2 hold, 2..3 release
+let bhStartTime = 0;
+const bhDuration = 4; // seconds total
+
+// 3D black hole mesh
+const bhGroup = new THREE.Group();
+scene.add(bhGroup);
+bhGroup.visible = false;
+
+// Event horizon sphere
+const bhSphere = new THREE.Mesh(
+    new THREE.SphereGeometry(0.5, 32, 24),
+    new THREE.MeshBasicMaterial({ color: 0x000000 })
+);
+bhGroup.add(bhSphere);
+
+// Accretion disk
+const bhDisk = new THREE.Mesh(
+    new THREE.TorusGeometry(1.8, 0.25, 16, 64),
+    new THREE.MeshBasicMaterial({ color: 0xaa44ff, transparent: true, opacity: 0.5, side: THREE.DoubleSide })
+);
+bhDisk.rotation.x = Math.PI / 2.3;
+bhGroup.add(bhDisk);
+
+// Inner ring
+const bhRing2 = new THREE.Mesh(
+    new THREE.TorusGeometry(1.1, 0.08, 12, 48),
+    new THREE.MeshBasicMaterial({ color: 0xff2266, transparent: true, opacity: 0.6, side: THREE.DoubleSide })
+);
+bhRing2.rotation.x = Math.PI / 2;
+bhGroup.add(bhRing2);
+
+// Outer glow ring
+const bhRing3 = new THREE.Mesh(
+    new THREE.TorusGeometry(2.5, 0.06, 8, 60),
+    new THREE.MeshBasicMaterial({ color: 0x6622cc, transparent: true, opacity: 0.3, side: THREE.DoubleSide })
+);
+bhRing3.rotation.x = Math.PI / 2;
+bhGroup.add(bhRing3);
+
+// Wireframe distortion sphere
+const bhWire = new THREE.Mesh(
+    new THREE.IcosahedronGeometry(2.8, 2),
+    new THREE.MeshBasicMaterial({ color: 0xaa44ff, wireframe: true, transparent: true, opacity: 0.08 })
+);
+bhGroup.add(bhWire);
+
+// Store original orbit radii (dynamic for add/remove)
+let origOrbitR = planets.map(p => p.orbitR);
+const origCharScale = 0.7;
+
+document.getElementById('bhBtn').addEventListener('click', () => {
+    if (bhActive) return;
+    unfocus();
+    bhActive = true;
+    bhStartTime = clock.getElapsedTime();
+    bhGroup.visible = true;
+    bhGroup.scale.setScalar(0.01);
+    document.getElementById('bhBtn').classList.add('active');
+});
+
+function updateBlackHole(t) {
+    if (!bhActive) return;
+    const elapsed = t - bhStartTime;
+    const totalDur = bhDuration;
+
+    if (elapsed >= totalDur) {
+        // Reset everything
+        bhActive = false;
+        bhGroup.visible = false;
+        document.getElementById('bhBtn').classList.remove('active');
+        planets.forEach((p, i) => { p.orbitR = origOrbitR[i]; });
+        charGroup.scale.setScalar(origCharScale);
+        starTV.group.scale.setScalar(1);
+        systemGroup.scale.setScalar(1);
+        particlesMesh.material.opacity = 0.7;
+        return;
+    }
+
+    // Phase 0..2s: suck in
+    // Phase 2s..3s: hold compressed
+    // Phase 3s..4s: explode back
+    const suckEnd = totalDur * 0.5;
+    const holdEnd = totalDur * 0.7;
+
+    // Black hole grows then shrinks
+    let bhScale;
+    if (elapsed < suckEnd) {
+        bhScale = THREE.MathUtils.lerp(0.01, 1.5, elapsed / suckEnd);
+    } else if (elapsed < holdEnd) {
+        bhScale = 1.5;
+    } else {
+        bhScale = THREE.MathUtils.lerp(1.5, 0.01, (elapsed - holdEnd) / (totalDur - holdEnd));
+    }
+    bhGroup.scale.setScalar(bhScale);
+
+    // Rotate accretion disk
+    bhDisk.rotation.z = t * 3;
+    bhRing2.rotation.z = -t * 5;
+    bhRing3.rotation.z = t * 2;
+    bhWire.rotation.y = t * 1.5;
+    bhWire.rotation.x = t * 0.8;
+    bhSphere.scale.setScalar(0.8 + Math.sin(t * 8) * 0.15);
+
+    // Pull orbits toward center
+    let suckFactor;
+    if (elapsed < suckEnd) {
+        suckFactor = elapsed / suckEnd; // 0->1
+    } else if (elapsed < holdEnd) {
+        suckFactor = 1;
+    } else {
+        suckFactor = 1 - (elapsed - holdEnd) / (totalDur - holdEnd); // 1->0
+    }
+
+    // Shrink orbit radii
+    planets.forEach((p, i) => {
+        p.orbitR = THREE.MathUtils.lerp(origOrbitR[i], 0.3, suckFactor);
+    });
+
+    // Shrink star TV
+    const starScale = THREE.MathUtils.lerp(1, 0.05, suckFactor);
+    starTV.group.scale.setScalar(starScale);
+
+    // Shrink character
+    const cScale = THREE.MathUtils.lerp(origCharScale, 0.01, suckFactor);
+    charGroup.scale.setScalar(cScale);
+
+    // Speed up system rotation (spiral effect)
+    targetRotY += suckFactor * 0.03;
+
+    // Particles pull in
+    particlesMesh.material.opacity = 0.7 * (1 - suckFactor * 0.8);
+
+    // Camera shake
+    if (suckFactor > 0.5) {
+        const shake = (suckFactor - 0.5) * 0.15;
+        camera.position.x += (Math.random() - 0.5) * shake;
+        camera.position.y += (Math.random() - 0.5) * shake;
+    }
+
+    // Fog pull in
+    scene.fog.near = THREE.MathUtils.lerp(28, 5, suckFactor);
+    scene.fog.far = THREE.MathUtils.lerp(65, 15, suckFactor);
+
+    // Restore fog on release
+    if (elapsed >= holdEnd) {
+        scene.fog.near = THREE.MathUtils.lerp(5, 28, (elapsed - holdEnd) / (totalDur - holdEnd));
+        scene.fog.far = THREE.MathUtils.lerp(15, 65, (elapsed - holdEnd) / (totalDur - holdEnd));
+    }
+}
+
+// ═══ ROTATION STATE ═══
+let targetRotY = 0, targetRotX = 0, curRotY = 0, curRotX = 0;
+let targetDist = 18, curDist = 18;
+let targetCamY = 4, curCamY = 4;
+
+// ═══ RAYCASTER ═══
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
+
+// ═══ MOUSE DRAG ═══
+let isDrag = false, wasDrag = false, pMX = 0, pMY = 0, dragDist = 0;
+gl.domElement.addEventListener('pointerdown', e => { isDrag = true; wasDrag = false; dragDist = 0; pMX = e.clientX; pMY = e.clientY; });
+window.addEventListener('pointerup', () => { wasDrag = dragDist > (isMobile ? 12 : 5); isDrag = false; });
+
+gl.domElement.addEventListener('click', e => {
+    if (wasDrag) return;
+    pointer.x = (e.clientX / innerWidth) * 2 - 1;
+    pointer.y = -(e.clientY / innerHeight) * 2 + 1;
+    raycaster.setFromCamera(pointer, camera);
+    const clickable = [starTV.fill, ...planets.map(p => p.tv.fill)];
+    const hits = raycaster.intersectObjects(clickable);
+    if (hits.length > 0) {
+        const mesh = hits[0].object;
+        if (mesh === starTV.fill) { focusOnStar(); return; }
+        const idx = planets.findIndex(p => p.tv.fill === mesh);
+        if (idx !== -1) focusOnPlanet(idx);
+    }
+});
+
+window.addEventListener('pointermove', e => {
+    if (!isDrag) return;
+    const dx = e.clientX - pMX, dy = e.clientY - pMY;
+    dragDist += Math.abs(dx) + Math.abs(dy);
+    pMX = e.clientX; pMY = e.clientY;
+    if (focusedPlanet !== null) {
+        focusAngleY += dx * 0.006;
+        focusAngleX += dy * 0.004;
+        focusAngleX = Math.max(-1.2, Math.min(1.2, focusAngleX));
+    } else {
+        targetRotY += dx * 0.004;
+        targetRotX += dy * 0.002;
+        targetRotX = Math.max(-0.8, Math.min(0.8, targetRotX));
+    }
+});
+
+// ═══ SCROLL ═══
+window.addEventListener('wheel', e => {
+    e.preventDefault();
+    if (focusedPlanet !== null) {
+        focusZoom += e.deltaY * 0.003;
+        focusZoom = Math.max(0.3, Math.min(4, focusZoom));
+        return;
+    }
+    if (scrollMode === 'rotate') {
+        targetRotY += e.deltaY * 0.0015;
+    } else {
+        targetDist += e.deltaY * 0.012;
+    }
+}, { passive: false });
+
+document.getElementById('zi').addEventListener('click', () => { targetDist -= 2; });
+document.getElementById('zo').addEventListener('click', () => { targetDist += 2; });
+
+// ═══ KEYBOARD ═══
+const keys = {};
+window.addEventListener('keydown', e => { keys[e.key.toLowerCase()] = true; if (e.key === 'Escape') unfocus(); });
+window.addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
+function handleKeys() {
+    if (focusedPlanet !== null) return;
+    const s = 0.018;
+    if (keys['a'] || keys['arrowleft']) targetRotY -= s;
+    if (keys['d'] || keys['arrowright']) targetRotY += s;
+    if (keys['w'] || keys['arrowup']) targetRotX -= s * 0.5;
+    if (keys['s'] || keys['arrowdown']) targetRotX += s * 0.5;
+    if (keys['q']) targetDist -= 0.15;
+    if (keys['e']) targetDist += 0.15;
+    targetRotX = Math.max(-0.8, Math.min(0.8, targetRotX));
+}
+
+// ═══ FOCUS ═══
+let focusedPlanet = null;
+let focusAngleY = 0, focusAngleX = 0.25, focusZoom = 1;
+const focusOv = document.getElementById('focusOv');
+const focusWorldPos = new THREE.Vector3();
+const camPosTarget = new THREE.Vector3(0, 4, 18);
+const camLookTarget = new THREE.Vector3(0, 0, 0);
+const curCamPos = new THREE.Vector3(0, 4, 18);
+const curCamLook = new THREE.Vector3(0, 0, 0);
+
+function focusOnPlanet(i) {
+    if (focusedPlanet === i) { unfocus(); return; }
+    focusedPlanet = i;
+    focusOv.classList.add('active');
+    planets[i].group.getWorldPosition(focusWorldPos);
+    focusAngleY = Math.atan2(curCamPos.x - focusWorldPos.x, curCamPos.z - focusWorldPos.z);
+    focusAngleX = 0.25;
+    focusZoom = 1;
+}
+function focusOnStar() {
+    if (focusedPlanet === 'star') { unfocus(); return; }
+    focusedPlanet = 'star';
+    focusOv.classList.add('active');
+    focusWorldPos.set(0, 0, 0);
+    systemGroup.localToWorld(focusWorldPos);
+    focusAngleY = Math.atan2(curCamPos.x - focusWorldPos.x, curCamPos.z - focusWorldPos.z);
+    focusAngleX = 0.25;
+    focusZoom = 1;
+}
+function unfocus() {
+    focusedPlanet = null;
+    focusOv.classList.remove('active');
+    targetDist = 18; targetCamY = 4;
+}
+document.getElementById('resetBtn').addEventListener('click', () => {
+    unfocus(); targetRotY = 0; targetRotX = 0; targetDist = 18; targetCamY = 4;
+});
+
+// ═══ SHAPE SWITCHER ═══
+const shapeClasses = ['card-tv','card-sphere','card-diamond','card-cube','card-donut','card-pyramid','card-crystal','card-knot'];
+function applyCardShape(el, shape) {
+    shapeClasses.forEach(c => el.classList.remove(c));
+    el.classList.add('card-' + shape.toLowerCase());
+}
+function rebuildAllShapes(type) {
+    if (bhActive) return;
+    currentShape = type;
+    // Rebuild star 3D
+    systemGroup.remove(starTV.group);
+    starTV = buildShape(type, 3.2, 2.2, 0.4, 0xff6600, true);
+    starTV.group.position.y = 0;
+    systemGroup.add(starTV.group);
+    applyCardShape(starCard, type);
+    // Rebuild orbiting shapes
+    planets.forEach((p, i) => {
+        const def = tvDefs[i];
+        p.group.remove(p.tv.group);
+        p.tv = buildShape(type, def.tvW, def.tvH, def.tvD, def.color, def.antenna);
+        p.group.add(p.tv.group);
+        applyCardShape(p.cssObj.element, type);
+    });
+    // Update active button
+    document.querySelectorAll('.shape-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.shape === type);
+    });
+}
+document.querySelectorAll('.shape-btn').forEach(btn => {
+    btn.addEventListener('click', () => rebuildAllShapes(btn.dataset.shape));
+});
+
+// ═══ PLANET ADD / REMOVE ═══
+const planetColorPool = [0xcc2266, 0x22cc88, 0x3399dd, 0xddaa22, 0xaa44ff, 0x44ffaa, 0xff8844, 0x8844ff, 0xff44aa, 0x44aaff];
+const planetNamePool = ['ALPHA','BETA','GAMMA','DELTA','EPSILON','ZETA','ETA','THETA','IOTA','KAPPA'];
+const videoPool = [
+    'videos/copy_012BCC15-2363-4E1A-BCDC-C19EEE80321A.mp4',
+    'videos/onepiece_demo.mp4',
+    'videos/IMG_3922 (1) - Trim.mp4',
+    'videos/JGVG8760.MP4',
+    'videos/IMG_0776.MP4',
+];
+let planetIdCounter = tvDefs.length;
+
+function spawnPlanet() {
     if (bhActive || planets.length >= 10) return;
+    unfocus();
     const idx = planets.length;
     const ci = planetIdCounter % planetColorPool.length;
     const lastOrbitR = idx > 0 ? planets[idx - 1].orbitR : 2;
     const orbitR = lastOrbitR + 3.5;
     const color = planetColorPool[ci];
-    const pName = name || planetNamePool[planetIdCounter % planetNamePool.length];
+    const name = planetNamePool[planetIdCounter % planetNamePool.length];
+    const url = videoPool[planetIdCounter % videoPool.length];
     const antenna = idx % 2 === 0;
     const tvW = 1.8 + Math.random() * 0.8;
     const tvH = tvW * 0.65;
@@ -495,7 +943,7 @@ function spawnPlanetWithVideo(url, name) {
     const speed = 0.2 / (1 + idx * 0.4);
     const tilt = (Math.random() - 0.5) * 0.3;
     const moonCount = 1 + Math.floor(Math.random() * 2);
-    const def = { orbitR, tvW, tvH, tvD, color, speed, tilt, moons: moonCount, name: pName, url, antenna };
+    const def = { orbitR, tvW, tvH, tvD, color, speed, tilt, moons: moonCount, name, url, antenna };
     tvDefs.push(def);
 
     const pGroup = new THREE.Group();
@@ -542,7 +990,7 @@ function spawnPlanetWithVideo(url, name) {
         <div class="tv-frame"><div class="tv-led"></div></div>
         <div class="tv-stand"></div>
         <div class="tv-base"></div>
-        <div class="tv-label">${pName}</div>
+        <div class="tv-label">${name}</div>
     `;
     card.querySelector('.tv-frame').prepend(vid);
     card.addEventListener('mouseenter', () => { vid.muted = false; vid.play().catch(() => {}); });
@@ -568,23 +1016,23 @@ function spawnPlanetWithVideo(url, name) {
     document.getElementById('pCount').textContent = planets.length;
 }
 
-function spawnPlanet() {
-    if (planets.length >= 10 || serverVideos.length === 0) return;
-    const vidData = serverVideos[planetIdCounter % serverVideos.length];
-    spawnPlanetWithVideo(vidData.url, vidData.name.replace(/^\d+-/, '').replace(/\.[^.]+$/, '').slice(0, 12).toUpperCase());
-}
-
 function despawnPlanet() {
     if (bhActive || planets.length <= 1) return;
     unfocus();
     const p = planets.pop();
     tvDefs.pop();
+
+    // Stop video and remove HTML element from DOM
     const vid = p.cssObj.element.querySelector('video');
     if (vid) { vid.pause(); vid.removeAttribute('src'); vid.load(); }
     p.cssObj.removeFromParent();
     if (p.cssObj.element.parentNode) p.cssObj.element.parentNode.removeChild(p.cssObj.element);
+
+    // Remove from css2dObjs tracking
     const ci = css2dObjs.indexOf(p.cssObj);
     if (ci !== -1) css2dObjs.splice(ci, 1);
+
+    // Remove 3D group (includes TV shape, moons, moon rings)
     systemGroup.remove(p.group);
     p.group.traverse(child => {
         if (child.geometry) child.geometry.dispose();
@@ -593,267 +1041,86 @@ function despawnPlanet() {
             else child.material.dispose();
         }
     });
+
+    // Remove orbit ring
     systemGroup.remove(p.ring);
     if (p.ring.geometry) p.ring.geometry.dispose();
     if (p.ring.material) p.ring.material.dispose();
+
     origOrbitR = planets.map(pp => pp.orbitR);
     document.getElementById('pCount').textContent = planets.length;
 }
 
 document.getElementById('pPlus').addEventListener('click', spawnPlanet);
 document.getElementById('pMinus').addEventListener('click', despawnPlanet);
+document.getElementById('pCount').textContent = planets.length;
 
-// ═══ CHARACTER ═══
-const charGroup = new THREE.Group();
-scene.add(charGroup);
-const headMesh = new THREE.Mesh(new THREE.IcosahedronGeometry(0.18, 1), new THREE.MeshBasicMaterial({ color: 0x44ddff, wireframe: true }));
-headMesh.position.y = 0.45; charGroup.add(headMesh);
-const eyeM = new THREE.MeshBasicMaterial({ color: 0xff4488 });
-const eL = new THREE.Mesh(new THREE.SphereGeometry(0.03, 5, 4), eyeM); eL.position.set(-0.06, 0.48, 0.14); charGroup.add(eL);
-const eR = new THREE.Mesh(new THREE.SphereGeometry(0.03, 5, 4), eyeM); eR.position.set(0.06, 0.48, 0.14); charGroup.add(eR);
-const torsoM = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.32, 0.16), new THREE.MeshBasicMaterial({ color: 0xff6600, wireframe: true }));
-torsoM.position.y = 0.12; charGroup.add(torsoM);
-const aGeo = new THREE.BoxGeometry(0.08, 0.28, 0.08);
-const aL = new THREE.Mesh(aGeo, new THREE.MeshBasicMaterial({ color: 0x3399dd, wireframe: true })); aL.position.set(-0.2, 0.12, 0); charGroup.add(aL);
-const aR = new THREE.Mesh(aGeo, new THREE.MeshBasicMaterial({ color: 0x22cc88, wireframe: true })); aR.position.set(0.2, 0.12, 0); charGroup.add(aR);
-const lGeo = new THREE.BoxGeometry(0.09, 0.28, 0.09);
-const lL = new THREE.Mesh(lGeo, new THREE.MeshBasicMaterial({ color: 0xddaa22, wireframe: true })); lL.position.set(-0.07, -0.18, 0); charGroup.add(lL);
-const lR = new THREE.Mesh(lGeo, new THREE.MeshBasicMaterial({ color: 0xcc2266, wireframe: true })); lR.position.set(0.07, -0.18, 0); charGroup.add(lR);
-const antM = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.16, 4), new THREE.MeshBasicMaterial({ color: 0x44ddff }));
-antM.position.set(0, 0.62, 0); charGroup.add(antM);
-const antTip = new THREE.Mesh(new THREE.SphereGeometry(0.025, 5, 4), new THREE.MeshBasicMaterial({ color: 0xff4488 }));
-antTip.position.set(0, 0.72, 0); charGroup.add(antTip);
-charGroup.scale.setScalar(0.7);
-
-// ═══ PARTICLES & STARS ═══
-const PCOUNT = 600;
-const pPos = new Float32Array(PCOUNT * 3), pCol = new Float32Array(PCOUNT * 3);
-const pal = [new THREE.Color(0x44ddff), new THREE.Color(0xff4488), new THREE.Color(0x22cc88), new THREE.Color(0xddaa22), new THREE.Color(0x3399dd)];
-for (let i = 0; i < PCOUNT; i++) {
-    const r = 6 + Math.random() * 35, th = Math.random() * Math.PI * 2, ph = Math.acos(2 * Math.random() - 1);
-    pPos[i*3]=r*Math.sin(ph)*Math.cos(th); pPos[i*3+1]=r*Math.sin(ph)*Math.sin(th); pPos[i*3+2]=r*Math.cos(ph);
-    const c = pal[~~(Math.random() * pal.length)];
-    pCol[i*3]=c.r; pCol[i*3+1]=c.g; pCol[i*3+2]=c.b;
+// ═══ TAP TO START (mobile video fix) ═══
+const tapOverlay = document.getElementById('tapOverlay');
+function startAllVideos() {
+    document.querySelectorAll('video').forEach(v => {
+        v.muted = true;
+        v.play().catch(() => {});
+    });
 }
-const pGeo = new THREE.BufferGeometry();
-pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-pGeo.setAttribute('color', new THREE.BufferAttribute(pCol, 3));
-const particlesMesh = new THREE.Points(pGeo, new THREE.PointsMaterial({ size: 0.05, vertexColors: true, depthWrite: false, transparent: true, opacity: 0.7 }));
-scene.add(particlesMesh);
-
-const BGS = 1400, bP = new Float32Array(BGS * 3);
-for (let i = 0; i < BGS; i++) { bP[i*3]=(Math.random()-.5)*120; bP[i*3+1]=(Math.random()-.5)*120; bP[i*3+2]=-20-Math.random()*70; }
-const bGeo = new THREE.BufferGeometry(); bGeo.setAttribute('position', new THREE.BufferAttribute(bP, 3));
-scene.add(new THREE.Points(bGeo, new THREE.PointsMaterial({ color: 0x334466, size: 0.04 })));
-
-scene.add(new THREE.AmbientLight(0xffffff, 0.15));
-
-// ═══ BLACK HOLE ═══
-let bhActive = false;
-let bhStartTime = 0;
-const bhDuration = 4;
-const bhGroup = new THREE.Group();
-scene.add(bhGroup);
-bhGroup.visible = false;
-const bhSphere = new THREE.Mesh(new THREE.SphereGeometry(0.5, 32, 24), new THREE.MeshBasicMaterial({ color: 0x000000 }));
-bhGroup.add(bhSphere);
-const bhDisk = new THREE.Mesh(new THREE.TorusGeometry(1.8, 0.25, 16, 64), new THREE.MeshBasicMaterial({ color: 0xaa44ff, transparent: true, opacity: 0.5, side: THREE.DoubleSide }));
-bhDisk.rotation.x = Math.PI / 2.3; bhGroup.add(bhDisk);
-const bhRing2 = new THREE.Mesh(new THREE.TorusGeometry(1.1, 0.08, 12, 48), new THREE.MeshBasicMaterial({ color: 0xff2266, transparent: true, opacity: 0.6, side: THREE.DoubleSide }));
-bhRing2.rotation.x = Math.PI / 2; bhGroup.add(bhRing2);
-const bhRing3 = new THREE.Mesh(new THREE.TorusGeometry(2.5, 0.06, 8, 60), new THREE.MeshBasicMaterial({ color: 0x6622cc, transparent: true, opacity: 0.3, side: THREE.DoubleSide }));
-bhRing3.rotation.x = Math.PI / 2; bhGroup.add(bhRing3);
-const bhWire = new THREE.Mesh(new THREE.IcosahedronGeometry(2.8, 2), new THREE.MeshBasicMaterial({ color: 0xaa44ff, wireframe: true, transparent: true, opacity: 0.08 }));
-bhGroup.add(bhWire);
-const origCharScale = 0.7;
-
-document.getElementById('bhBtn').addEventListener('click', () => {
-    if (bhActive) return;
-    unfocus();
-    bhActive = true;
-    bhStartTime = clock.getElapsedTime();
-    bhGroup.visible = true;
-    bhGroup.scale.setScalar(0.01);
-    document.getElementById('bhBtn').classList.add('active');
-});
-
-function updateBlackHole(t) {
-    if (!bhActive) return;
-    const elapsed = t - bhStartTime;
-    if (elapsed >= bhDuration) {
-        bhActive = false; bhGroup.visible = false;
-        document.getElementById('bhBtn').classList.remove('active');
-        planets.forEach((p, i) => { p.orbitR = origOrbitR[i]; });
-        charGroup.scale.setScalar(origCharScale);
-        starTV.group.scale.setScalar(1);
-        systemGroup.scale.setScalar(1);
-        particlesMesh.material.opacity = 0.7;
-        return;
-    }
-    const suckEnd = bhDuration * 0.5, holdEnd = bhDuration * 0.7;
-    let bhScale;
-    if (elapsed < suckEnd) bhScale = THREE.MathUtils.lerp(0.01, 1.5, elapsed / suckEnd);
-    else if (elapsed < holdEnd) bhScale = 1.5;
-    else bhScale = THREE.MathUtils.lerp(1.5, 0.01, (elapsed - holdEnd) / (bhDuration - holdEnd));
-    bhGroup.scale.setScalar(bhScale);
-    bhDisk.rotation.z = t*3; bhRing2.rotation.z = -t*5; bhRing3.rotation.z = t*2;
-    bhWire.rotation.y = t*1.5; bhWire.rotation.x = t*0.8;
-    bhSphere.scale.setScalar(0.8 + Math.sin(t*8)*0.15);
-    let suckFactor;
-    if (elapsed < suckEnd) suckFactor = elapsed / suckEnd;
-    else if (elapsed < holdEnd) suckFactor = 1;
-    else suckFactor = 1 - (elapsed - holdEnd) / (bhDuration - holdEnd);
-    planets.forEach((p, i) => { if (origOrbitR[i] !== undefined) p.orbitR = THREE.MathUtils.lerp(origOrbitR[i], 0.3, suckFactor); });
-    starTV.group.scale.setScalar(THREE.MathUtils.lerp(1, 0.05, suckFactor));
-    charGroup.scale.setScalar(THREE.MathUtils.lerp(origCharScale, 0.01, suckFactor));
-    targetRotY += suckFactor * 0.03;
-    particlesMesh.material.opacity = 0.7 * (1 - suckFactor * 0.8);
-    if (suckFactor > 0.5) {
-        const shake = (suckFactor - 0.5) * 0.15;
-        camera.position.x += (Math.random() - 0.5) * shake;
-        camera.position.y += (Math.random() - 0.5) * shake;
-    }
-    scene.fog.near = THREE.MathUtils.lerp(28, 5, suckFactor);
-    scene.fog.far = THREE.MathUtils.lerp(65, 15, suckFactor);
-    if (elapsed >= holdEnd) {
-        scene.fog.near = THREE.MathUtils.lerp(5, 28, (elapsed - holdEnd) / (bhDuration - holdEnd));
-        scene.fog.far = THREE.MathUtils.lerp(15, 65, (elapsed - holdEnd) / (bhDuration - holdEnd));
-    }
+if (isMobile) {
+    tapOverlay.addEventListener('click', () => {
+        tapOverlay.style.display = 'none';
+        startAllVideos();
+    }, { once: true });
+    tapOverlay.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        tapOverlay.style.display = 'none';
+        startAllVideos();
+    }, { once: true });
+} else {
+    tapOverlay.style.display = 'none';
+    startAllVideos();
 }
 
-// ═══ ROTATION STATE ═══
-let targetRotY = 0, targetRotX = 0, curRotY = 0, curRotX = 0;
-let targetDist = 18, curDist = 18;
-let targetCamY = 4, curCamY = 4;
-
-// ═══ RAYCASTER ═══
-const raycaster = new THREE.Raycaster();
-const pointer = new THREE.Vector2();
-
-// ═══ MOUSE DRAG ═══
-let isDrag = false, wasDrag = false, pMX = 0, pMY = 0, dragDist = 0;
-gl.domElement.addEventListener('pointerdown', e => { isDrag = true; wasDrag = false; dragDist = 0; pMX = e.clientX; pMY = e.clientY; });
-window.addEventListener('pointerup', () => { wasDrag = dragDist > 5; isDrag = false; });
-
-gl.domElement.addEventListener('click', e => {
-    if (wasDrag) return;
-    pointer.x = (e.clientX / innerWidth) * 2 - 1;
-    pointer.y = -(e.clientY / innerHeight) * 2 + 1;
-    raycaster.setFromCamera(pointer, camera);
-    const clickable = [starTV.fill, ...planets.map(p => p.tv.fill)];
-    const hits = raycaster.intersectObjects(clickable);
-    if (hits.length > 0) {
-        const mesh = hits[0].object;
-        if (mesh === starTV.fill) { focusOnStar(); return; }
-        const idx = planets.findIndex(p => p.tv.fill === mesh);
-        if (idx !== -1) focusOnPlanet(idx);
-    }
+// Re-attempt play on visibility change (tab switch / screen wake)
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) startAllVideos();
 });
 
-window.addEventListener('pointermove', e => {
-    if (!isDrag) return;
-    const dx = e.clientX - pMX, dy = e.clientY - pMY;
-    dragDist += Math.abs(dx) + Math.abs(dy);
-    pMX = e.clientX; pMY = e.clientY;
-    if (focusedPlanet !== null) {
-        focusAngleY += dx * 0.006; focusAngleX += dy * 0.004;
-        focusAngleX = Math.max(-1.2, Math.min(1.2, focusAngleX));
+// ═══ BRIGHTNESS CONTROL ═══
+let brightness = 1.0;
+const brTrack = document.getElementById('brTrack');
+const brFill = document.getElementById('brFill');
+const brVal = document.getElementById('brVal');
+const brOverlay = document.createElement('div');
+brOverlay.style.cssText = 'position:fixed;inset:0;z-index:198;pointer-events:none;background:black;opacity:0;transition:opacity .15s';
+document.body.appendChild(brOverlay);
+
+function setBrightness(v) {
+    brightness = Math.max(0.1, Math.min(2.0, v));
+    const pct = ((brightness - 0.1) / 1.9) * 100;
+    brFill.style.height = pct + '%';
+    brVal.textContent = Math.round(brightness * 100) + '%';
+    // brightness < 1 = darken overlay, brightness > 1 = boost renderer
+    if (brightness <= 1) {
+        brOverlay.style.opacity = 1 - brightness;
+        gl.domElement.style.filter = '';
+        css2d.domElement.style.filter = '';
     } else {
-        targetRotY += dx * 0.004; targetRotX += dy * 0.002;
-        targetRotX = Math.max(-0.8, Math.min(0.8, targetRotX));
+        brOverlay.style.opacity = 0;
+        const boost = 'brightness(' + brightness.toFixed(2) + ')';
+        gl.domElement.style.filter = boost;
+        css2d.domElement.style.filter = boost;
     }
-});
+}
+setBrightness(1.0);
 
-// ═══ SCROLL ═══
-window.addEventListener('wheel', e => {
-    e.preventDefault();
-    if (focusedPlanet !== null) { focusZoom += e.deltaY * 0.003; focusZoom = Math.max(0.3, Math.min(4, focusZoom)); return; }
-    if (scrollMode === 'rotate') targetRotY += e.deltaY * 0.0015;
-    else targetDist += e.deltaY * 0.012;
-}, { passive: false });
-document.getElementById('zi').addEventListener('click', () => { targetDist -= 2; });
-document.getElementById('zo').addEventListener('click', () => { targetDist += 2; });
-
-// ═══ KEYBOARD ═══
-const keys = {};
-window.addEventListener('keydown', e => { keys[e.key.toLowerCase()] = true; if (e.key === 'Escape') unfocus(); });
-window.addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
-function handleKeys() {
-    if (focusedPlanet !== null) return;
-    const s = 0.018;
-    if (keys['a'] || keys['arrowleft']) targetRotY -= s;
-    if (keys['d'] || keys['arrowright']) targetRotY += s;
-    if (keys['w'] || keys['arrowup']) targetRotX -= s * 0.5;
-    if (keys['s'] || keys['arrowdown']) targetRotX += s * 0.5;
-    if (keys['q']) targetDist -= 0.15;
-    if (keys['e']) targetDist += 0.15;
-    targetRotX = Math.max(-0.8, Math.min(0.8, targetRotX));
+let brDragging = false;
+function brFromEvent(e) {
+    const rect = brTrack.getBoundingClientRect();
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    const pct = 1 - Math.max(0, Math.min(1, (clientY - rect.top) / rect.height));
+    setBrightness(0.1 + pct * 1.9);
 }
-
-// ═══ FOCUS ═══
-let focusedPlanet = null;
-let focusAngleY = 0, focusAngleX = 0.25, focusZoom = 1;
-const focusOv = document.getElementById('focusOv');
-const focusWorldPos = new THREE.Vector3();
-const camPosTarget = new THREE.Vector3(0, 4, 18);
-const camLookTarget = new THREE.Vector3(0, 0, 0);
-const curCamPos = new THREE.Vector3(0, 4, 18);
-const curCamLook = new THREE.Vector3(0, 0, 0);
-
-function focusOnPlanet(i) {
-    if (focusedPlanet === i) { unfocus(); return; }
-    focusedPlanet = i;
-    focusOv.classList.add('active');
-    planets[i].group.getWorldPosition(focusWorldPos);
-    focusAngleY = Math.atan2(curCamPos.x - focusWorldPos.x, curCamPos.z - focusWorldPos.z);
-    focusAngleX = 0.25; focusZoom = 1;
-}
-function focusOnStar() {
-    if (focusedPlanet === 'star') { unfocus(); return; }
-    focusedPlanet = 'star';
-    focusOv.classList.add('active');
-    focusWorldPos.set(0, 0, 0);
-    systemGroup.localToWorld(focusWorldPos);
-    focusAngleY = Math.atan2(curCamPos.x - focusWorldPos.x, curCamPos.z - focusWorldPos.z);
-    focusAngleX = 0.25; focusZoom = 1;
-}
-function unfocus() {
-    focusedPlanet = null;
-    focusOv.classList.remove('active');
-    targetDist = 18; targetCamY = 4;
-}
-document.getElementById('resetBtn').addEventListener('click', () => {
-    unfocus(); targetRotY = 0; targetRotX = 0; targetDist = 18; targetCamY = 4;
-});
-
-// ═══ SHAPE SWITCHER ═══
-const shapeClasses = ['card-tv','card-sphere','card-diamond','card-cube','card-donut','card-pyramid','card-crystal','card-knot'];
-function applyCardShape(el, shape) {
-    shapeClasses.forEach(c => el.classList.remove(c));
-    el.classList.add('card-' + shape.toLowerCase());
-}
-function rebuildAllShapes(type) {
-    if (bhActive) return;
-    currentShape = type;
-    systemGroup.remove(starTV.group);
-    starTV = buildShape(type, 3.2, 2.2, 0.4, 0xff6600, true);
-    starTV.group.position.y = 0;
-    systemGroup.add(starTV.group);
-    applyCardShape(starCard, type);
-    planets.forEach((p, i) => {
-        const def = tvDefs[i];
-        p.group.remove(p.tv.group);
-        p.tv = buildShape(type, def.tvW, def.tvH, def.tvD, def.color, def.antenna);
-        p.group.add(p.tv.group);
-        applyCardShape(p.cssObj.element, type);
-    });
-    document.querySelectorAll('.shape-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.shape === type);
-    });
-}
-document.querySelectorAll('.shape-btn').forEach(btn => {
-    btn.addEventListener('click', () => rebuildAllShapes(btn.dataset.shape));
-});
+brTrack.addEventListener('pointerdown', e => { brDragging = true; brFromEvent(e); e.preventDefault(); e.stopPropagation(); });
+window.addEventListener('pointermove', e => { if (brDragging) { brFromEvent(e); e.preventDefault(); } });
+window.addEventListener('pointerup', () => { brDragging = false; });
 
 // ═══ VISIBILITY ═══
 const _wp = new THREE.Vector3(), _dir = new THREE.Vector3();
@@ -868,6 +1135,7 @@ function updateVis() {
             obj.element.classList.remove('back-hidden');
             const fade = THREE.MathUtils.smoothstep(dist, 28, 40);
             obj.element.style.opacity = 1 - fade;
+            // Dynamic size — big when close, small when far
             const minW = 80, maxW = 320;
             const s = THREE.MathUtils.smoothstep(dist, 2, 22);
             const w = maxW - s * (maxW - minW);
@@ -883,6 +1151,7 @@ function animate() {
     const t = clock.getElapsedTime();
     handleKeys();
 
+    // Lerp
     curRotY += (targetRotY - curRotY) * 0.06;
     curRotX += (targetRotX - curRotX) * 0.06;
     targetDist = Math.max(5, Math.min(35, targetDist));
@@ -892,32 +1161,48 @@ function animate() {
     systemGroup.rotation.y = curRotY;
     systemGroup.rotation.x = curRotX;
 
+    // ── Move TVs along orbits ──
     planets.forEach((p, i) => {
         const angle = p.startAngle + t * p.speed;
         const x = Math.cos(angle) * p.orbitR;
         const z = Math.sin(angle) * p.orbitR;
         const y = Math.sin(angle * 0.5) * p.tilt * p.orbitR * 0.08;
         p.group.position.set(x, y, z);
+
+        // TV always faces camera (Y axis only)
         p.tv.group.rotation.y = -angle + Math.PI;
+
+        // Orbit ring pulse
         p.ringMat.opacity = 0.06 + Math.sin(t + i) * 0.04;
+
+        // Screen glow flicker
         p.tv.glowMat.opacity = 0.04 + Math.sin(t * 2 + i) * 0.03;
+
+        // Moons
         p.moons.forEach(m => {
             const ma = t * m.speed + m.phase;
-            m.mesh.position.set(Math.cos(ma)*m.orbitR, Math.sin(ma)*Math.sin(m.tiltX)*m.orbitR*0.3, Math.sin(ma)*m.orbitR);
+            m.mesh.position.set(
+                Math.cos(ma) * m.orbitR,
+                Math.sin(ma) * Math.sin(m.tiltX) * m.orbitR * 0.3,
+                Math.sin(ma) * m.orbitR
+            );
             m.mesh.rotation.y = t * 2;
         });
     });
 
+    // Star TV slow rotation
     starTV.group.rotation.y = t * 0.15;
     starTV.glowMat.opacity = 0.05 + Math.sin(t * 1.5) * 0.03;
     starTV.edgeMat.opacity = 0.6 + Math.sin(t * 2) * 0.15;
 
     systemGroup.updateMatrixWorld(true);
 
+    // ── Camera ──
     if (focusedPlanet !== null) {
         let fDist;
         if (focusedPlanet === 'star') {
-            focusWorldPos.set(0, 0, 0); systemGroup.localToWorld(focusWorldPos);
+            focusWorldPos.set(0, 0, 0);
+            systemGroup.localToWorld(focusWorldPos);
             fDist = (starR * 2.5 + 2) * focusZoom;
         } else {
             planets[focusedPlanet].group.getWorldPosition(focusWorldPos);
@@ -939,54 +1224,48 @@ function animate() {
     camera.position.copy(curCamPos);
     camera.lookAt(curCamLook);
 
-    const cOrbitR = 8, cAngle = t * 0.18;
-    charGroup.position.set(Math.cos(cAngle)*cOrbitR, Math.sin(t*0.5)*1.5+1, Math.sin(cAngle)*cOrbitR);
+    // ── Character ──
+    const cOrbitR = 8;
+    const cAngle = t * 0.18;
+    const cY = Math.sin(t * 0.5) * 1.5 + 1;
+    charGroup.position.set(Math.cos(cAngle) * cOrbitR, cY, Math.sin(cAngle) * cOrbitR);
     charGroup.rotation.y = -cAngle + Math.PI / 2;
-    aL.rotation.x = Math.sin(t*3)*0.5; aR.rotation.x = -Math.sin(t*3)*0.5;
-    lL.rotation.x = Math.sin(t*3)*0.4; lR.rotation.x = -Math.sin(t*3)*0.4;
-    antTip.visible = Math.sin(t*5) > 0;
+    aL.rotation.x = Math.sin(t * 3) * 0.5;
+    aR.rotation.x = -Math.sin(t * 3) * 0.5;
+    lL.rotation.x = Math.sin(t * 3) * 0.4;
+    lR.rotation.x = -Math.sin(t * 3) * 0.4;
+    antTip.visible = Math.sin(t * 5) > 0;
 
+    // Particles
     particlesMesh.rotation.y -= 0.0004;
+
+    // Black hole
     updateBlackHole(t);
+
     updateVis();
     gl.render(scene, camera);
     css2d.render(scene, camera);
 }
 animate();
 
-// ═══ INIT: Load videos from server and build planets ═══
-async function init() {
-    await fetchVideos();
-    if (serverVideos.length > 0) {
-        // First video = star
-        starVidUrl = serverVideos[0].url;
-        starVid.src = starVidUrl;
-        starVid.play().catch(() => {});
-        // Rest = planets
-        for (let i = 1; i < serverVideos.length && i < 6; i++) {
-            const v = serverVideos[i];
-            const name = v.name.replace(/^\d+-/, '').replace(/\.[^.]+$/, '').slice(0, 12).toUpperCase();
-            spawnPlanetWithVideo(v.url, name);
-        }
-    }
-    document.getElementById('loadScreen').classList.add('hidden');
-    setTimeout(() => { document.getElementById('loadScreen').style.display = 'none'; }, 700);
-}
-init();
-
 // ═══ NOISE ═══
-const nC = document.getElementById('noise'); nC.width = 180; nC.height = 180;
-const nX = nC.getContext('2d');
-function drawN() {
-    const img = nX.createImageData(180, 180);
-    for (let i = 0; i < img.data.length; i += 4) {
-        const v = Math.random() * 255;
-        img.data[i] = v; img.data[i+1] = v; img.data[i+2] = v; img.data[i+3] = 255;
+const nC = document.getElementById('noise');
+if (isMobile) {
+    nC.style.display = 'none';
+} else {
+    nC.width = 180; nC.height = 180;
+    const nX = nC.getContext('2d');
+    function drawN() {
+        const img = nX.createImageData(180, 180);
+        for (let i = 0; i < img.data.length; i += 4) {
+            const v = Math.random() * 255;
+            img.data[i] = v; img.data[i+1] = v; img.data[i+2] = v; img.data[i+3] = 255;
+        }
+        nX.putImageData(img, 0, 0);
+        requestAnimationFrame(drawN);
     }
-    nX.putImageData(img, 0, 0);
-    requestAnimationFrame(drawN);
+    drawN();
 }
-drawN();
 
 // ═══ RESIZE ═══
 window.addEventListener('resize', () => {
